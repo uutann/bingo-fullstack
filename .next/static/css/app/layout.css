@@ -51,46 +51,61 @@
 /*!*****************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./src/app/globals.css ***!
   \*****************************************************************************************************************************************************************************************************************************************************************/
-/* globals.css */
-
+.body{
+    height: 100vh;
+    width:100vw;
+    position:relative;
+}
+.listWrapper{
+    position:absolute;
+    left:900px;
+    top:200px
+}
+  
 /* 全体リセットと基本設定 */
 html, body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
-    height: 100vh;
+    background: linear-gradient(135deg, #f2f2f2, #ffffff);
+    height: 100%;
+}
+  
+/* bodyクラスの要素を全画面中央寄せするコンテナ */
+.body {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-  }
-  .body{
-    height: 100vh;
-    width:100vw;
-    position:relative;
-  }
-  .listWrapper{
-    position:absolute;
-    left:800px;
-    top:200px
-  }
-  /* メインの表示部分のスタイル */
-  div {
-    text-align: center;
-  }
+    justify-content: center;
+    min-height: 100vh;
+}
   
-  /* メインの表示数値を大きく、中央に配置 */
-  h1 {
-    font-size: 15rem;
+/* mainWrapper は中央寄せ */
+.mainWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+  
+/* 大きな数字表示: 初期はアニメーション無し */
+.mainWrapper h1 {
+    font-size: 14rem;
     margin: 0;
     color: #333;
-    /* 数字が更新されるたびにアニメーション */
-    animation: fadeInScale 0.4s ease-out;
-  }
+    /* 初期はアニメーション不要 */
+}
+
+/* 新しいガチャアニメーションクラス */
+.gachaAnimation {
+    animation: bingoReveal 2.5s ease-out;
+    /* アニメーション中、強調のため若干のドロップシャドウや輝きを演出 */
+    text-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
+}
   
-  /* ボタンのスタイリング */
-  button {
+/* ボタンスタイル */
+.mainWrapper button {
+    position: relative; /* 擬似要素配置のため */
     background: #ffce00;
     border: none;
     border-radius: 10px;
@@ -98,64 +113,91 @@ html, body {
     font-size: 2rem;
     cursor: pointer;
     margin-top: 2rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     font-weight: bold;
     color: #333;
-  }
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
   
-  /* ホバー時のボタンアニメーション */
-  button:hover {
+/* ボタンホバーで全画面規模のラディアルグラデーション表示 */
+.mainWrapper button::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 206, 0, 0.4), transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+}
+  
+/* ボタンホバー */
+.mainWrapper button:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  }
+}
   
-  /* 過去に出た数字を表示するリストエリア */
-  .List {
+/* リスト部分の配置 */
+.listWrapper {
     margin-top: 2rem;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
-  }
+}
   
-  /* 過去の数字を大きめに表示して見やすく。画面に近づいてきたら見える程度の大きさ */
-  .List div {
+/* 過去の数値表示 */
+.listWrapper div {
     font-size: 2rem;
     color: #555;
     background: #f9f9f9;
     padding: 0.5rem 1rem;
     border-radius: 5px;
-    transition: transform 0.3s ease;
-    /* リスト追加時のポップインアニメーション */
     animation: popIn 0.3s ease-out;
-  }
-  
-  .List div:hover {
-    transform: scale(1.1);
-    background: #fff7cc;
-  }
-  
-  /* メイン数値表示用アニメーション定義 */
-  @keyframes fadeInScale {
+    transition: transform 0.3s ease;
+}
+
+/* 新しいビンゴリビールアニメーション */
+@keyframes bingoReveal {
     0% {
-      opacity: 0;
-      transform: scale(0.5);
+        opacity: 0;
+        transform: scale(0.2) rotate(-30deg);
+        filter: blur(10px);
+    }
+    20% {
+        opacity: 0.3;
+        transform: scale(0.6) rotate(10deg);
+        filter: blur(5px);
+    }
+    40% {
+        opacity: 1;
+        transform: scale(1.2) rotate(-10deg);
+        filter: blur(2px);
+    }
+    60% {
+        transform: scale(0.8) rotate(5deg);
+        filter: blur(1px);
+    }
+    80% {
+        transform: scale(1.05) rotate(-3deg);
+        filter: blur(0.5px);
     }
     100% {
-      opacity: 1;
-      transform: scale(1);
+        transform: scale(1) rotate(0deg);
+        filter: blur(0);
+        opacity: 1;
     }
-  }
+}
   
-  /* リスト項目ポップイン用アニメーション */
-  @keyframes popIn {
+/* リスト項目ポップインアニメーション */
+@keyframes popIn {
     0% {
-      opacity: 0;
-      transform: scale(0.5);
+        opacity: 0;
+        transform: scale(0.5);
     }
     100% {
-      opacity: 1;
-      transform: scale(1);
+        opacity: 1;
+        transform: scale(1);
     }
-  }
-  
+}
+
