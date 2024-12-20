@@ -1,0 +1,11 @@
+.font{
+    color:red;
+    font-size: 36px;
+    margin-right: 10px;
+}
+.ListWrapper{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 500px;
+}
